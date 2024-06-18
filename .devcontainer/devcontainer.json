@@ -1,0 +1,34 @@
+{
+  "name": "Sembr Dev",
+  "context": "..",
+  "dockerFile": "Containerfile",
+  "runArgs": [
+    // run container as current user
+    "--userns=keep-id",
+    // disable selinux isolation that breaks bind mounts
+    "--security-opt=label=disable"
+  ],
+  // run as a virtual prevac user isolated to the container
+  "containerUser": "sembr",
+  "updateRemoteUserUID": true,
+  "containerEnv": {
+    "HOME": "/home/sembr"
+  },
+  "customizations": {
+    "vscode": {
+      // use the shell default from the container
+      "settings": {
+        "terminal.integrated.shell.linux": null
+      },
+      // vscode plugins, isolated to the container
+      "extensions": [
+        // gitlens
+        "eamodio.gitlens",
+        // python
+        "ms-python.python"
+      ]
+    }
+  },
+  // install all deps defined in the repo
+  "postStartCommand": "pip install . && sembr"
+}
